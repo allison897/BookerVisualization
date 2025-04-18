@@ -34,6 +34,27 @@ const timeline = d3.select("#timeline");
 const maxTime = d3.max(speeches, d => d.seconds);
 
 const scale = d3.scaleLinear().domain([0, maxTime]).range([0, 9000]);
+const timeScaleContainer = d3.select(".time-scale");
+
+// 1 hour = 3600 seconds
+const hourInterval = 3600;
+const totalHours = Math.ceil(maxTime / hourInterval);
+
+for (let i = 0; i <= totalHours; i++) {
+  const seconds = i * hourInterval;
+  const x = scale(seconds);
+
+  // Line
+  timeScaleContainer.append("div")
+    .attr("class", "time-line")
+    .style("left", x + "px");
+
+  // Label
+  timeScaleContainer.append("div")
+    .attr("class", "time-label")
+    .style("left", x + "px")
+    .text(formatTime(seconds));
+}
 
 const rows = timeline
   .selectAll(".row")
